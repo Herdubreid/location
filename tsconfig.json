@@ -1,0 +1,19 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": false,
+    "target": "es6",
+    "module": "es6",
+    "moduleResolution": "node"
+  },
+  "include": [
+    "JS"
+  ],
+  "exclude": [
+    "node_modules",
+    "wwwroot"
+  ]
+}

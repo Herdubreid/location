@@ -1,0 +1,44 @@
+﻿@page "/"
+@inherits BlazorStateComponent
+@inject LocationService LocationService
+
+<div id="map" hidden></div>
+
+@if (AppState.Address == null)
+{
+    @if (AppState.Error == null)
+    {
+        <p><em>Fetching location...</em></p>
+    } else {
+        <p class="text-danger">@AppState.Error</p>
+    }
+}
+else
+{
+    <div class="row">
+        <p class="col">Are you in @AppState.Address.locality, @AppState.Address.postalCode @AppState.Address.adminDistrict, @AppState.Address.countryRegion?</p>
+    </div>
+    <div class="row mt-4 justify-content-center">
+        <div class="col">
+            <button class="btn btn-primary" type="button" @onclick="@TryAgain">No, try again?</button>
+        </div>
+    </div>
+}
+
+@code {
+    protected AppState AppState => GetState<AppState>();
+
+    protected void TryAgain()
+    {
+        Mediator.Send(new AddressAction());
+        _ = LocationService.LoadMap();
+    }
+
+    async protected override Task OnAfterRenderAsync()
+    {
+        if (AppState.Address == null)
+        {
+            await LocationService.LoadMap();
+        }
+    }
+}
