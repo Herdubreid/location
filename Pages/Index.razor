@@ -18,9 +18,15 @@ else
     <div class="row">
         <p class="col">Are you in @AppState.Address.locality, @AppState.Address.postalCode @AppState.Address.adminDistrict, @AppState.Address.countryRegion?</p>
     </div>
+    <div class="row" hidden="@(!ShowMore)">
+        <p class="col">You're in or near @AppState.Address.addressLine</p>
+    </div>
     <div class="row mt-4 justify-content-center">
         <div class="col">
             <button class="btn btn-primary" type="button" @onclick="@TryAgain">No, try again?</button>
+        </div>
+        <div class="col">
+            <button class="btn btn-success" type="button" hidden="@ShowMore" @onclick="@(() => ShowMore = true)">Yes, show more...</button>
         </div>
     </div>
 }
@@ -28,9 +34,12 @@ else
 @code {
     protected AppState AppState => GetState<AppState>();
 
+    protected bool ShowMore { get; set; } = false;
+
     protected void TryAgain()
     {
         Mediator.Send(new AddressAction());
+        ShowMore = false;
         _ = LocationService.LoadMap();
     }
 
